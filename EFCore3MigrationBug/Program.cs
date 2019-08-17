@@ -92,13 +92,13 @@ namespace EFCore3MigrationBug
 				{
 					line.ToTable("Post");
 					line.HasKey(x => new { x.BlogId, x.PostId });
-					line.HasForeignKey(x => x.BlogId);
+					line.WithOwner().HasForeignKey(x => x.BlogId);
 
 					line.OwnsMany(x => x.Attachments, history =>
 					{
 						history.ToTable("Attachment");
-						history.HasKey(x => new { x.BlogId, x.PostId, x.AttachmentId }).ForSqlServerIsClustered();
-						history.HasForeignKey(x => new { x.BlogId, x.PostId });
+						history.HasKey(x => new { x.BlogId, x.PostId, x.AttachmentId }).IsClustered();
+						history.WithOwner().HasForeignKey(x => new { x.BlogId, x.PostId });
 					});
 				});
 			}
